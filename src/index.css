@@ -1,8 +1,35 @@
 @import "tailwindcss";
 
+@media (prefers-reduced-motion: no-preference) {
+  .hero-ellipsis > span {
+    animation: hero-dot-pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero-ellipsis > span:nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  .hero-ellipsis > span:nth-child(3) {
+    animation-delay: 240ms;
+  }
+}
+
+@keyframes hero-dot-pulse {
+  0%, 52%, 100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+
+  24% {
+    opacity: 1;
+    transform: translateY(-0.055em);
+  }
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
   --color-border: hsl(var(--border));
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
@@ -120,7 +147,12 @@
     width: 100%;
     max-width: 100%;
     overflow-x: clip;
+    scrollbar-width: none;
     background-color: var(--color-black);
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   body {
