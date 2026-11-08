@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { StarsBackground } from "@/components/animate-ui/backgrounds/stars";
 import { AvailabilityBadge } from "./availability-badge";
 import { MobileContactCTA, SpinningCTA } from "./contact-cta";
+import { CubeSculpture } from "./cube-sculpture";
 import { HeroHeading } from "./hero-heading";
 import { SocialStrip } from "./social-strip";
 
@@ -42,6 +43,7 @@ export const Hero = () => (
           </p>
         </motion.div>
       </div>
+      <CubeSculpture />
       <SpinningCTA />
     </StarsBackground>
   </section>

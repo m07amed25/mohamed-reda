@@ -1,3 +1,4 @@
+import About from "@/components/about/About";
 import { BrandLogo } from "@/components/hero/brand-logo";
 import { CursorFollower } from "@/components/hero/cursor-follower";
 import { Hero } from "@/components/hero/hero";
@@ -14,6 +15,7 @@ const Index = () => (
     <BrandLogo />
     <CursorFollower />
     <Hero />
+    <About />
   </div>
 );
 
