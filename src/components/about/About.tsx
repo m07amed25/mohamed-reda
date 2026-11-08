@@ -1,114 +1,107 @@
-import { useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { contactHref } from "@/components/hero/contact";
 
-const About = () => {
-  const [vh, setVh] = useState(
-    typeof window !== "undefined" ? window.innerHeight : 800,
-  );
-
-  useEffect(() => {
-    const updateVh = () => setVh(window.innerHeight);
-    updateVh();
-    window.addEventListener("resize", updateVh);
-    return () => window.removeEventListener("resize", updateVh);
-  }, []);
-
-  const { scrollY } = useScroll();
-
-  const y1 = useTransform(scrollY, [0, vh * 0.4], [80, 0]);
-  const opacity1 = useTransform(scrollY, [0, vh * 0.3], [0, 1]);
-
-  const y2 = useTransform(scrollY, [vh * 0.1, vh * 0.5], [80, 0]);
-  const opacity2 = useTransform(scrollY, [vh * 0.1, vh * 0.4], [0, 1]);
-
-  const y3 = useTransform(scrollY, [vh * 0.2, vh * 0.5], [80, 0]);
-  const opacity3 = useTransform(scrollY, [vh * 0.2, vh * 0.5], [0, 1]);
-
-  const y4 = useTransform(scrollY, [vh * 0.3, vh * 0.6], [80, 0]);
-  const opacity4 = useTransform(scrollY, [vh * 0.3, vh * 0.6], [0, 1]);
-
-  return (
-    <section
-      id="about"
-      className="sticky bottom-0 z-0 min-h-dvh w-full bg-white text-black font-sans px-6 py-12 md:px-12 lg:px-16 overflow-hidden flex items-center justify-center"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-12 w-full max-w-[1600px] mx-auto">
-        <motion.div
-          className="md:col-span-3 lg:col-span-3 pt-2"
-          style={{ y: y1, opacity: opacity1 }}
+const About = () => (
+  <section
+    id="about"
+    aria-labelledby="about-heading"
+    className="relative z-0 flex min-h-dvh items-center bg-stone-50 px-6 pt-24 pb-16 font-sans text-stone-950 selection:bg-green-200 selection:text-green-950 md:px-10 md:py-28 lg:sticky lg:bottom-0"
+  >
+    <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-20">
+      <div>
+        <h2
+          id="about-heading"
+          className="font-sans text-6xl leading-none font-bold tracking-[-0.04em] sm:text-7xl xl:text-8xl"
         >
-          <h2 className="font-sans text-xs md:text-sm font-bold uppercase tracking-widest">
-            Background & Data
-          </h2>
-        </motion.div>
-        <div className="md:col-span-9 lg:col-span-9 flex flex-col gap-10 md:gap-12">
-          <motion.div
-            className="flex flex-col gap-2"
-            style={{ y: y2, opacity: opacity2 }}
-          >
-            <h3 className="font-sans text-xs md:text-sm font-bold uppercase tracking-wide opacity-100 mb-1">
-              01. Education
-            </h3>
-            <div className="flex flex-col">
-              <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Faculty of Computer and Information Technology, Mansoura
-                Univercity
-              </p>
-              <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                B.Sc. in Computer Science (2022 - 2026)
-              </p>
-            </div>
-          </motion.div>
+          About <span className="text-green-800">me.</span>
+        </h2>
+        <p className="mt-5 max-w-sm text-lg leading-relaxed text-stone-700">
+          I’m Mohamed Reda, a freelance full-stack web developer. I work across
+          the front end and back end, with a particular interest in how people
+          navigate and interact with web applications.
+        </p>
+        <a
+          href={contactHref}
+          className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-green-800 underline decoration-green-800/40 underline-offset-4 hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-800"
+        >
+          Get in touch
+          <ArrowUpRight aria-hidden="true" className="size-4" />
+        </a>
+      </div>
 
-          <motion.div
-            className="flex flex-col gap-2"
-            style={{ y: y3, opacity: opacity3 }}
-          >
-            <h3 className="font-sans text-xs md:text-sm font-bold uppercase tracking-wide opacity-100 mb-1">
-              02. Experience
-            </h3>
-            <div className="flex flex-col gap-6">
-              <div className="">
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                  Frontend Developer Intern at Omnexa
-                </p>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                  July 2026 - October 2026
-                </p>
-              </div>
-              <div>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                  Freelance Full-Stack Web Developer
-                </p>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                  July 2025 - Present
-                </p>
-              </div>
-            </div>
-          </motion.div>
+      <div className="border-y border-stone-300">
+        <div className="grid gap-3 py-6 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-5">
+          <h3 className="pt-1 font-sans text-xs font-bold tracking-widest text-green-800 uppercase">
+            Education
+          </h3>
+          <div>
+            <p className="text-xl font-semibold tracking-tight sm:text-2xl">
+              Mansoura University
+            </p>
+            <p className="mt-1 leading-relaxed text-stone-700">
+              B.Sc. in Computer Science, Faculty of Computer and Information
+              Technology
+            </p>
+            <p className="mt-2 text-sm text-stone-600 tabular-nums">
+              <time dateTime="2022">2022</time>-{" "}
+              <time dateTime="2026">2026</time>
+            </p>
+          </div>
+        </div>
 
-          {/* 0.3. Foucs */}
-          <motion.div
-            className="flex flex-col gap-2"
-            style={{ y: y4, opacity: opacity4 }}
-          >
-            <h3 className="font-sans text-xs md:text-sm font-bold uppercase tracking-wide opacity-100 mb-1">
-              03. Focus
-            </h3>
-            <ul className="flex flex-col">
-              <li className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Software Engineering Architecture
-              </li>
-              <li className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Artificial Intelligence & Process Automation
-              </li>
-            </ul>
-          </motion.div>
+        <div className="grid gap-3 border-t border-stone-300 py-6 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-5">
+          <h3 className="pt-1 font-sans text-xs font-bold tracking-widest text-green-800 uppercase">
+            Experience
+          </h3>
+          <ul className="space-y-5">
+            <li>
+              <p className="text-xl font-semibold tracking-tight sm:text-2xl">
+                Frontend Developer Intern at Omnexa
+              </p>
+              <p className="mt-1 text-sm text-stone-600 tabular-nums">
+                <time dateTime="2026-07">July</time> -{" "}
+                <time dateTime="2026-10">October 2026</time>
+              </p>
+            </li>
+            <li>
+              <p className="text-xl font-semibold tracking-tight sm:text-2xl">
+                Freelance Full-Stack Web Developer
+              </p>
+              <p className="mt-1 text-sm text-stone-600 tabular-nums">
+                <time dateTime="2025-04">April 2025</time> - Present
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <div className="grid gap-3 border-t border-stone-300 py-6 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-5">
+          <h3 className="pt-1 font-sans text-xs font-bold tracking-widest text-green-800 uppercase">
+            Focus
+          </h3>
+          <ul className="space-y-4">
+            <li>
+              <p className="text-lg font-medium tracking-tight sm:text-xl">
+                Software Architecture
+              </p>
+              <p className="mt-1 leading-relaxed text-stone-700">
+                How to structure web applications so they’re easier to test,
+                maintain, and extend.
+              </p>
+            </li>
+            <li>
+              <p className="text-lg font-medium tracking-tight sm:text-xl">
+                AI &amp; Process Automation
+              </p>
+              <p className="mt-1 leading-relaxed text-stone-700">
+                Where AI and automation can reduce repetitive work in everyday
+                workflows.
+              </p>
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default About;
