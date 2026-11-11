@@ -3,9 +3,8 @@ import { contactHref } from "@/components/hero/contact";
 
 const About = () => (
   <section
-    id="about"
     aria-labelledby="about-heading"
-    className="relative z-0 flex min-h-dvh items-center bg-stone-50 px-6 pt-24 pb-16 font-sans text-stone-950 selection:bg-green-200 selection:text-green-950 md:px-10 md:py-28 lg:sticky lg:bottom-0"
+    className="relative z-10 flex min-h-dvh items-center bg-stone-50 px-6 pt-24 pb-16 font-sans text-stone-950 selection:bg-green-200 selection:text-green-950 md:px-10 md:py-28 lg:sticky lg:bottom-0"
   >
     <div className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-20">
       <div>

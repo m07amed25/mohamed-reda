@@ -35,11 +35,10 @@ export const Hero = () => (
         >
           <div className="w-12 h-[2px] bg-white mb-6 md:hidden"></div>
           <p className="font-sans text-xs md:text-sm font-medium text-white leading-relaxed tracking-wide uppercase text-left">
-            Building digital experiences that are not only visually
-            captivating but also functionally robust. I specialize in
-            crafting seamless user interfaces and intuitive interactions,
-            ensuring that every project I undertake is both aesthetically
-            pleasing and highly usable.
+            Building digital experiences that are not only visually captivating
+            but also functionally robust. I specialize in crafting seamless user
+            interfaces and intuitive interactions, ensuring that every project I
+            undertake is both aesthetically pleasing and highly usable.
           </p>
         </motion.div>
       </div>

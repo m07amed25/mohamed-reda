@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="125 125 250 250">
+  <!-- Vector mark from https://firebase.google.com/static/images/products/icons/build_firestore.svg -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M250 262.5L137.5 312.5V262.5L250 212.5L362.5 262.5V306.25V296.875V312.5L250 262.5ZM250 125L362.5 175V225L250 175L137.5 225V175L250 125ZM292.188 306.25L348.438 331.25L250 375V325L292.188 306.25Z" fill="white"/>
+</svg>
