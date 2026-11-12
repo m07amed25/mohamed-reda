@@ -1,30 +1,5 @@
 import { motion, stagger, useReducedMotion } from "motion/react";
-import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa6";
-import { MdOutlineAlternateEmail } from "react-icons/md";
-import { contactHref } from "./contact";
-
-const socials = [
-  {
-    label: "GitHub",
-    icon: <FaGithub />,
-    href: "https://github.com/m07amed25",
-  },
-  {
-    label: "LinkedIn",
-    icon: <FaLinkedin />,
-    href: "https://www.linkedin.com/in/mhmd-reda-ali/",
-  },
-  {
-    label: "Instagram",
-    icon: <FaInstagram />,
-    href: "https://www.instagram.com/m07amedr/",
-  },
-  {
-    label: "Email",
-    icon: <MdOutlineAlternateEmail />,
-    href: contactHref,
-  },
-];
+import { socialLinks } from "./contact";
 
 const SocialLinks = () => {
   const reduceMotion = useReducedMotion();
@@ -39,12 +14,12 @@ const SocialLinks = () => {
       }}
       className="flex list-none flex-col gap-1"
     >
-      {socials.map((social) => {
-        const opensNewTab = social.href.startsWith("https://");
+      {socialLinks.map(({ label, href, icon: Icon }) => {
+        const opensNewTab = href.startsWith("https://");
 
         return (
           <motion.li
-            key={social.label}
+            key={label}
             variants={{
               entering: { opacity: 0.5, scale: 0.85 },
               ready: {
@@ -55,8 +30,8 @@ const SocialLinks = () => {
             }}
           >
             <motion.a
-              href={social.href}
-              aria-label={social.label}
+              href={href}
+              aria-label={label}
               target={opensNewTab ? "_blank" : "_self"}
               rel={opensNewTab ? "noopener noreferrer" : undefined}
               whileHover={reduceMotion ? undefined : { scale: 1.1 }}
@@ -64,7 +39,7 @@ const SocialLinks = () => {
               transition={{ type: "spring", stiffness: 450, damping: 28 }}
               className="grid size-11 place-items-center rounded-full text-lg text-white/80 hover:bg-white/10 hover:text-green-400 active:text-green-400 focus-visible:text-green-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 motion-safe:transition-colors"
             >
-              <span aria-hidden="true">{social.icon}</span>
+              <span aria-hidden="true"><Icon /></span>
             </motion.a>
           </motion.li>
         );

@@ -10,6 +10,13 @@ const inquiry = {
   jobTitle: "Design director",
   company: "Example Studio",
   companyWebsite: "https://studio.example/work",
+  location: "Toronto, Canada",
+  profileUrl: "https://example.com/sam",
+  preferredContact: "WhatsApp",
+  projectType: "Website or web app",
+  budget: "3,000",
+  budgetCurrency: "CAD",
+  timeline: "Launch in eight weeks",
   teamSize: "1–10",
   message: "I'd like a <script> tag displayed as text.",
   referral: "GitHub",
@@ -46,8 +53,13 @@ test("delivers the inquiry to the owner and sends the visitor a signed copy", as
     assert.match(message.html, /Phone country: <\/strong>United States/);
   }
   for (const value of Object.values(inquiry)) assert.ok(mail[1].text.includes(value), `The copy is missing: ${value}`);
-  for (const value of [inquiry.phone, inquiry.jobTitle, inquiry.companyWebsite]) {
+  for (const value of [inquiry.phone, inquiry.jobTitle, inquiry.companyWebsite, inquiry.location, inquiry.profileUrl, inquiry.preferredContact]) {
     assert.ok(mail[0].text.includes(value), `The owner’s email is missing: ${value}`);
+  }
+  for (const message of mail) {
+    assert.match(message.text, /Project type: Website or web app/);
+    assert.match(message.text, /Budget: 3,000 CAD/);
+    assert.match(message.text, /Timeline: Launch in eight weeks/);
   }
   assert.match(mail[1].text, /Best,\s+Mohamed Reda/);
 });
@@ -61,7 +73,21 @@ test("accepts an inquiry without the optional contact fields", async () => {
   const response = await handle(request({ name: inquiry.name, email: inquiry.email, message: inquiry.message }));
   assert.deepEqual(await response.json(), { ok: true, copySent: true });
   assert.equal(mail.length, 2);
-  for (const message of mail) assert.doesNotMatch(message.text, /Phone:|Phone country:|Job title:|Company website:/);
+  for (const message of mail) assert.doesNotMatch(message.text, /Phone:|Phone country:|Job title:|Company website:|City and country:|Professional profile:|Preferred contact method:|Project type:|Budget:|Timeline:/);
+});
+
+test("defaults an entered budget to USD when no currency is supplied", async () => {
+  const mail: Parameters<Parameters<typeof createContactDelivery>[1]>[0][] = [];
+  const handle = createContactHandler(createContactDelivery("owner@example.com", async (message) => {
+    mail.push(message);
+  }));
+
+  const response = await handle(request({
+    name: inquiry.name, email: inquiry.email, message: inquiry.message, budget: "2500–4000",
+  }));
+  assert.equal(response.status, 200);
+  assert.equal(mail.length, 2);
+  for (const message of mail) assert.match(message.text, /Budget: 2500–4000 USD/);
 });
 
 test("keeps a delivered inquiry successful if its copy cannot be sent", async () => {
@@ -79,6 +105,15 @@ test("rejects invalid, cross-origin, and oversized requests without sending mail
 
   assert.equal((await handle(request({ ...inquiry, email: "a@example.com,b@example.com" }))).status, 400);
   assert.equal((await handle(request({ ...inquiry, companyWebsite: "mailto:sam@example.com" }))).status, 400);
+  assert.equal((await handle(request({ ...inquiry, profileUrl: "mailto:sam@example.com" }))).status, 400);
+  assert.equal((await handle(request({ ...inquiry, preferredContact: "Unknown" }))).status, 400);
+  assert.equal((await handle(request({ ...inquiry, projectType: "Unknown" }))).status, 400);
+  assert.equal((await handle(request({ ...inquiry, budgetCurrency: "ZZZ" }))).status, 400);
+  const missingPhone = await handle(request({ ...inquiry, phone: "" }));
+  assert.equal(missingPhone.status, 400);
+  assert.deepEqual(await missingPhone.json(), {
+    error: "Enter a complete phone number for your preferred contact method.",
+  });
   assert.equal((await handle(request({ ...inquiry, phone: { number: "555-0104" } }))).status, 400);
   assert.equal((await handle(request({ ...inquiry, phoneCountry: "ZZ" }))).status, 400);
   assert.equal((await handle(request({ ...inquiry, jobTitle: "x".repeat(101) }))).status, 400);

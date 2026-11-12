@@ -5,6 +5,7 @@ import { Hero } from "@/components/hero/hero";
 import Navbar from "@/components/Navbar";
 import SelectedWork from "@/components/SelectedWork";
 import { Bookademo3 } from "@/components/ui/book-a-demo-3";
+import { Footer } from "@/components/ui/footer";
 
 export { Mail } from "lucide-react";
 export {
@@ -14,7 +15,7 @@ export {
 } from "react-icons/fa6";
 
 const Index = () => (
-  <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
+  <div id="top" tabIndex={-1} className="min-h-screen relative bg-black selection:bg-white selection:text-black">
     <Navbar />
     <BrandLogo />
     <CursorFollower />
@@ -27,6 +28,7 @@ const Index = () => (
     </div>
     <div id="contact" />
     <Bookademo3 />
+    <Footer />
   </div>
 );
 

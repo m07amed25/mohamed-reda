@@ -1,15 +1,17 @@
 import { useId, useRef, useState, type SubmitEvent } from "react";
-import { ArrowUpRight, Check, LoaderCircle, Send } from "lucide-react";
+import { ArrowUpRight, Check, ChevronDown, ListPlus, LoaderCircle, Send } from "lucide-react";
 import { isPossiblePhoneNumber, type Country } from "react-phone-number-input";
 import { contactHref } from "@/components/hero/contact";
 import { PhoneInput } from "@/components/reui/phone-input";
 
 const control = "mt-2 min-h-12 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base text-stone-950 caret-green-800 placeholder:text-stone-500 focus-visible:border-green-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800";
+const webUrlPattern = "[Hh][Tt][Tt][Pp][Ss]?://.+";
+const budgetCurrencies = Intl.supportedValuesOf("currency");
 
 const prompts = [
   "Tell me what you’re building and who it’s for.",
   "Share any goals, deadlines, or work already in progress.",
-  "I’ll reply by email so we can talk through next steps.",
+  "I’ll follow up so we can talk through next steps.",
 ];
 
 type Status = { kind: "idle" | "sending" | "success" | "error"; message: string };
@@ -18,22 +20,26 @@ export function Bookademo3() {
   const [status, setStatus] = useState<Status>({ kind: "idle", message: "" });
   const [phone, setPhone] = useState("");
   const [phoneCountry, setPhoneCountry] = useState<Country>();
-  const [phoneInvalid, setPhoneInvalid] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
   const [phoneReset, setPhoneReset] = useState(0);
   const phoneId = useId();
+  const budgetId = useId();
   const sending = useRef(false);
 
   async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (sending.current) return;
     const form = event.currentTarget;
-    if (phone && !isPossiblePhoneNumber(phone)) {
-      setPhoneInvalid(true);
+    const data = Object.fromEntries(new FormData(form));
+    const prefersPhone = data.preferredContact === "Phone call" || data.preferredContact === "WhatsApp";
+    if ((phone || prefersPhone) && !isPossiblePhoneNumber(phone)) {
+      setPhoneError(prefersPhone
+        ? "Enter a complete phone number for your preferred contact method."
+        : "Check the country code and enter a complete phone number.");
       form.ownerDocument.getElementById(phoneId)?.focus();
       return;
     }
     sending.current = true;
-    const data = Object.fromEntries(new FormData(form));
     const fallback = "Your message could not be sent. Try again or email me directly.";
     setStatus({ kind: "sending", message: "Sending your message…" });
 
@@ -65,7 +71,7 @@ export function Bookademo3() {
   const busy = status.kind === "sending";
 
   return (
-    <section aria-labelledby="contact-heading" className="relative z-10 flex min-h-dvh items-center bg-stone-50 px-6 py-12 font-sans text-stone-950 selection:bg-green-200 selection:text-green-950 md:px-10 lg:py-8 motion-safe:lg:not-focus-within:sticky motion-safe:lg:not-focus-within:bottom-0">
+    <section aria-labelledby="contact-heading" className="relative z-0 flex min-h-dvh items-center bg-stone-50 px-6 py-12 font-sans text-stone-950 selection:bg-green-200 selection:text-green-950 md:px-10 lg:py-3 motion-safe:lg:sticky motion-safe:lg:bottom-0 motion-safe:lg:has-[:focus-visible]:relative">
       <div className="mx-auto grid w-full max-w-7xl items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16 xl:gap-20">
         <div>
           <h2 id="contact-heading" className="max-w-[12ch] font-sans text-5xl leading-[0.98] font-bold tracking-[-0.04em] text-balance sm:text-7xl lg:text-8xl">
@@ -87,7 +93,7 @@ export function Bookademo3() {
           </a>
         </div>
 
-        <form aria-labelledby="contact-form-heading" onSubmit={submit} className="rounded-2xl border border-stone-300 bg-white p-5 sm:p-6 xl:p-8">
+        <form aria-labelledby="contact-form-heading" onSubmit={submit} className="rounded-2xl border border-stone-300 bg-white p-5 sm:p-6">
           <h3 id="contact-form-heading" className="font-sans text-2xl font-semibold tracking-tight">Tell me about your project</h3>
           <fieldset disabled={busy} className="mt-5 min-w-0 space-y-4 disabled:opacity-75">
             <fieldset className="min-w-0">
@@ -107,15 +113,15 @@ export function Bookademo3() {
                     key={phoneReset}
                     id={phoneId}
                     value={phone}
-                    onChange={(value) => { setPhone(value); setPhoneInvalid(false); }}
+                    onChange={(value) => { setPhone(value); setPhoneError(""); }}
                     onCountryChange={setPhoneCountry}
                     autoComplete="tel"
                     disabled={busy}
-                    aria-invalid={phoneInvalid || undefined}
-                    aria-describedby={phoneInvalid ? `${phoneId}-error` : undefined}
+                    aria-invalid={Boolean(phoneError) || undefined}
+                    aria-describedby={phoneError ? `${phoneId}-error` : undefined}
                     className="mt-2 *:min-h-12 *:border-stone-300 *:shadow-none [&_[data-slot=combobox-trigger]]:rounded-s-lg [&_[data-slot=input]]:rounded-e-lg [&_[data-slot=input]]:text-base [&_[data-slot=input]]:caret-green-800 [&_[data-slot=input]]:focus-visible:ring-green-800/30 [&_[data-slot=combobox-trigger]]:focus-visible:ring-green-800/30"
                   />
-                  {phoneInvalid && <p id={`${phoneId}-error`} role="alert" className="mt-2 font-normal text-red-800">Check the country code and enter a complete phone number.</p>}
+                  {phoneError && <p id={`${phoneId}-error`} role="alert" className="mt-2 font-normal text-red-800">{phoneError}</p>}
                 </div>
                 <label className="text-sm font-medium">
                   Job title <span className="font-normal text-stone-600">(optional)</span>
@@ -127,10 +133,72 @@ export function Bookademo3() {
                 </label>
                 <label className="text-sm font-medium">
                   Company website <span className="font-normal text-stone-600">(optional)</span>
-                  <input name="companyWebsite" type="url" autoComplete="url" pattern="[Hh][Tt][Tt][Pp][Ss]?://.+" title="Enter a website starting with https:// or http://" maxLength={512} placeholder="https://example.com" className={control} />
+                  <input name="companyWebsite" type="url" autoComplete="url" pattern={webUrlPattern} title="Enter a website starting with https:// or http://" maxLength={512} placeholder="https://example.com" className={control} />
                 </label>
               </div>
             </fieldset>
+
+            <details className="group border-y border-green-800/20 bg-green-50/80">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2.5 px-4 py-2 text-sm font-semibold text-green-900 hover:bg-green-100/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800 [&::-webkit-details-marker]:hidden">
+                <ListPlus aria-hidden="true" className="size-4 shrink-0" />
+                <span className="flex-1">Client and project details <span className="font-normal text-green-800">(optional)</span></span>
+                <ChevronDown aria-hidden="true" className="size-4 shrink-0 group-open:rotate-180 motion-safe:transition-transform" />
+              </summary>
+              <div className="space-y-4 border-t border-green-800/15 p-4">
+                <fieldset className="min-w-0">
+                  <legend className="mb-2 text-sm font-semibold text-green-900">Client details</legend>
+                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    <label className="text-sm font-medium">
+                      City and country
+                      <input name="location" maxLength={150} placeholder="e.g. Cairo, Egypt" className={control} />
+                    </label>
+                    <label className="text-sm font-medium">
+                      Professional profile
+                      <input name="profileUrl" type="url" pattern={webUrlPattern} title="Enter a link starting with https:// or http://" maxLength={512} placeholder="LinkedIn or portfolio" className={control} />
+                    </label>
+                    <label className="text-sm font-medium">
+                      Preferred contact method
+                      <select name="preferredContact" defaultValue="" onChange={() => setPhoneError("")} className={control}>
+                        <option value="">No preference</option>
+                        <option>Email</option>
+                        <option>Phone call</option>
+                        <option>WhatsApp</option>
+                      </select>
+                      <span className="mt-1.5 block text-xs font-normal text-stone-600">Phone or WhatsApp needs a number.</span>
+                    </label>
+                  </div>
+                </fieldset>
+                <fieldset className="min-w-0">
+                  <legend className="mb-2 text-sm font-semibold text-green-900">Project planning</legend>
+                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    <label className="text-sm font-medium">
+                      Project type
+                      <select name="projectType" defaultValue="" className={control}>
+                        <option value="">Select a type</option>
+                        <option>Website or web app</option>
+                        <option>Redesign or rebuild</option>
+                        <option>Feature or integration</option>
+                        <option>Maintenance or support</option>
+                        <option>Other</option>
+                      </select>
+                    </label>
+                    <div className="min-w-0 text-sm font-medium">
+                      <label htmlFor={budgetId}>Estimated budget</label>
+                      <div className="grid grid-cols-[minmax(0,1fr)_5rem] gap-2">
+                        <input id={budgetId} name="budget" maxLength={80} placeholder="Amount" className={control} />
+                        <select name="budgetCurrency" aria-label="Budget currency" defaultValue="USD" className={control}>
+                          {budgetCurrencies.map((currency) => <option key={currency}>{currency}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <label className="text-sm font-medium">
+                      Target timeline
+                      <input name="timeline" maxLength={120} placeholder="e.g. 8 weeks" className={control} />
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+            </details>
 
             <div className="grid gap-x-5 gap-y-4 border-t border-stone-200 pt-4 sm:grid-cols-2">
               <label className="text-sm font-medium">

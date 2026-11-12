@@ -1,4 +1,4 @@
-import { isSupportedCountry } from "react-phone-number-input";
+import { isPossiblePhoneNumber, isSupportedCountry } from "react-phone-number-input";
 
 export type Inquiry = {
   name: string;
@@ -8,6 +8,13 @@ export type Inquiry = {
   jobTitle: string;
   company: string;
   companyWebsite: string;
+  location: string;
+  profileUrl: string;
+  preferredContact: string;
+  projectType: string;
+  budget: string;
+  budgetCurrency: string;
+  timeline: string;
   teamSize: string;
   message: string;
   referral: string;
@@ -17,6 +24,7 @@ type DeliverInquiry = (inquiry: Inquiry) => Promise<boolean>;
 
 const maxBodyBytes = 32 * 1024;
 const windowMs = 10 * 60_000;
+const budgetCurrencies = new Set(Intl.supportedValuesOf("currency"));
 const emailAddress =
   /^[a-z0-9.!#$%&'*+\-/=?^_`{|}~]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/i;
 
@@ -45,7 +53,7 @@ async function readBody(request: Request) {
   return { data };
 }
 
-function isCompanyWebsite(value: string) {
+function isOptionalWebUrl(value: string) {
   if (!value) return true;
   if (value.length > 512 || !/^https?:\/\//i.test(value)) return false;
   try {
@@ -65,6 +73,13 @@ function parseInquiry(data: Record<string, unknown>): Inquiry | null {
     jobTitle = "",
     company = "",
     companyWebsite = "",
+    location = "",
+    profileUrl = "",
+    preferredContact = "",
+    projectType = "",
+    budget = "",
+    budgetCurrency = "USD",
+    timeline = "",
     teamSize = "",
     message,
     referral = "",
@@ -76,6 +91,13 @@ function parseInquiry(data: Record<string, unknown>): Inquiry | null {
     typeof phoneCountry !== "string" ||
     typeof jobTitle !== "string" ||
     typeof companyWebsite !== "string" ||
+    typeof location !== "string" ||
+    typeof profileUrl !== "string" ||
+    typeof preferredContact !== "string" ||
+    typeof projectType !== "string" ||
+    typeof budget !== "string" ||
+    typeof budgetCurrency !== "string" ||
+    typeof timeline !== "string" ||
     typeof message !== "string" ||
     typeof company !== "string" ||
     typeof teamSize !== "string" ||
@@ -90,6 +112,13 @@ function parseInquiry(data: Record<string, unknown>): Inquiry | null {
     phoneCountry: phoneCountry.trim().toUpperCase(),
     jobTitle: jobTitle.trim(),
     companyWebsite: companyWebsite.trim(),
+    location: location.trim(),
+    profileUrl: profileUrl.trim(),
+    preferredContact: preferredContact.trim(),
+    projectType: projectType.trim(),
+    budget: budget.trim(),
+    budgetCurrency: budgetCurrency.trim().toUpperCase() || "USD",
+    timeline: timeline.trim(),
     message: message.trim(),
     company: company.trim(),
     teamSize: teamSize.trim(),
@@ -105,7 +134,14 @@ function parseInquiry(data: Record<string, unknown>): Inquiry | null {
     /[\r\n]/.test(inquiry.phone) ||
     (inquiry.phoneCountry !== "" && !isSupportedCountry(inquiry.phoneCountry)) ||
     inquiry.jobTitle.length > 100 ||
-    !isCompanyWebsite(inquiry.companyWebsite) ||
+    !isOptionalWebUrl(inquiry.companyWebsite) ||
+    inquiry.location.length > 150 ||
+    !isOptionalWebUrl(inquiry.profileUrl) ||
+    !["", "Email", "Phone call", "WhatsApp"].includes(inquiry.preferredContact) ||
+    !["", "Website or web app", "Redesign or rebuild", "Feature or integration", "Maintenance or support", "Other"].includes(inquiry.projectType) ||
+    inquiry.budget.length > 80 ||
+    !budgetCurrencies.has(inquiry.budgetCurrency) ||
+    inquiry.timeline.length > 120 ||
     !inquiry.message ||
     inquiry.message.length > 3000 ||
     inquiry.company.length > 150 ||
@@ -179,6 +215,12 @@ export function createContactHandler(deliver?: DeliverInquiry) {
         },
         { status: 400 },
       );
+    if (inquiry.preferredContact && inquiry.preferredContact !== "Email" && !isPossiblePhoneNumber(inquiry.phone)) {
+      return Response.json(
+        { error: "Enter a complete phone number for your preferred contact method." },
+        { status: 400 },
+      );
+    }
     if (!deliver)
       return Response.json(
         { error: "The form is unavailable. Please email me directly." },

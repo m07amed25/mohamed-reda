@@ -1,10 +1,9 @@
-import { createElement as h } from "react";
+import { createElement as h, Fragment } from "react";
 import {
   Body,
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Preview,
   Text,
@@ -25,11 +24,29 @@ type Message = {
 };
 
 const paragraph = { fontSize: "16px", lineHeight: "1.5" };
+const sectionHeading = { fontSize: "16px", margin: "22px 0 6px" };
 const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
 
+function renderDetails(details: [label: string, value: string][]) {
+  const rows = details.filter(([, value]) => value);
+  if (!rows.length) return null;
+
+  return h(Text, { style: { ...paragraph, margin: "0", overflowWrap: "anywhere" } },
+    ...rows.map(([label, value], index) => h(Fragment, { key: label },
+      index > 0 && h("br"),
+      h("strong", null, `${label}: `),
+      value,
+    )),
+  );
+}
+
 async function renderMessage(title: string, inquiry: Inquiry, isCopy = false) {
-  const { name, email, phone, phoneCountry, jobTitle, company, companyWebsite, teamSize, message, referral } = inquiry;
-  const details = [
+  const {
+    name, email, phone, phoneCountry, jobTitle, company, companyWebsite,
+    location, profileUrl, preferredContact, projectType, budget, budgetCurrency, timeline,
+    teamSize, message, referral,
+  } = inquiry;
+  const clientDetails = renderDetails([
     ["Name", name],
     ["Email", email],
     ["Phone", phone],
@@ -37,9 +54,17 @@ async function renderMessage(title: string, inquiry: Inquiry, isCopy = false) {
     ["Job title", jobTitle],
     ["Company", company],
     ["Company website", companyWebsite],
+    ["City and country", location],
+    ["Professional profile", profileUrl],
+    ["Preferred contact method", preferredContact],
     ["Team size", teamSize],
     ["How you found me", referral],
-  ];
+  ]);
+  const projectDetails = renderDetails([
+    ["Project type", projectType],
+    ["Budget", budget ? `${budget} ${budgetCurrency}` : ""],
+    ["Timeline", timeline],
+  ]);
   const html = await render(
     h(
       Html,
@@ -50,43 +75,33 @@ async function renderMessage(title: string, inquiry: Inquiry, isCopy = false) {
         Body,
         {
           style: {
-            backgroundColor: "#f5f5f4",
+            backgroundColor: "#ffffff",
             color: "#1c1917",
             fontFamily: "Arial, sans-serif",
-            padding: "24px 12px",
+            padding: "16px",
           },
         },
         h(
           Container,
           {
             style: {
-              backgroundColor: "#ffffff",
-              borderTop: "3px solid #166534",
               maxWidth: "560px",
-              padding: "24px",
             },
           },
           h(
             Heading,
-            { as: "h1", style: { fontSize: "24px", margin: "0 0 20px" } },
+            { as: "h1", style: { fontSize: "24px", margin: "0 0 12px" } },
             title,
           ),
-          isCopy && h(Text, { style: paragraph }, "Thanks for reaching out. Here’s a copy of what you sent through my portfolio."),
-          h(Hr, { style: { borderColor: "#e7e5e4" } }),
-          ...details.filter(([, value]) => value).map(([label, value]) =>
-            h(
-              Text,
-              { key: label, style: { ...paragraph, margin: "8px 0" } },
-              h("strong", null, `${label}: `),
-              value,
-            ),
-          ),
-          h(Heading, { as: "h2", style: { fontSize: "16px", margin: "20px 0 8px" } }, "Project details"),
-          h(Text, { style: { ...paragraph, marginTop: "0", overflowWrap: "anywhere" } },
+          isCopy && h(Text, { style: paragraph }, "Thanks for reaching out. Here’s a copy of your inquiry."),
+          h(Heading, { as: "h2", style: sectionHeading }, "Client details"),
+          clientDetails,
+          h(Heading, { as: "h2", style: sectionHeading }, "Project details"),
+          projectDetails,
+          h(Text, { style: { ...paragraph, marginTop: projectDetails ? "12px" : "0", overflowWrap: "anywhere" } },
             message.split(/\r?\n/).flatMap((part, index) => index ? [h("br", { key: index }), part] : [part]),
           ),
-          isCopy && h(Hr, { style: { borderColor: "#e7e5e4" } }),
-          isCopy && h(Text, { style: paragraph }, "I’ll review your message and get back to you. If you’d like to add anything, just reply to this email."),
+          isCopy && h(Text, { style: paragraph }, "I’ll get back to you after reviewing your inquiry. You can reply here if you’d like to add anything."),
           isCopy && h(Text, { style: paragraph }, "Best,", h("br"), "Mohamed Reda"),
         ),
       ),
