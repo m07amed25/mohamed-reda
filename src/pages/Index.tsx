@@ -4,6 +4,7 @@ import { CursorFollower } from "@/components/hero/cursor-follower";
 import { Hero } from "@/components/hero/hero";
 import Navbar from "@/components/Navbar";
 import SelectedWork from "@/components/SelectedWork";
+import { Bookademo3 } from "@/components/ui/book-a-demo-3";
 
 export { Mail } from "lucide-react";
 export {
@@ -21,7 +22,11 @@ const Index = () => (
     <div id="about" />
     <About />
 
-    <SelectedWork />
+    <div className="relative z-20">
+      <SelectedWork />
+    </div>
+    <div id="contact" />
+    <Bookademo3 />
   </div>
 );
 

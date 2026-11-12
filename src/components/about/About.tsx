@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import { contactHref } from "@/components/hero/contact";
 
 const About = () => (
   <section
@@ -20,7 +19,7 @@ const About = () => (
           navigate and interact with web applications.
         </p>
         <a
-          href={contactHref}
+          href="#contact"
           className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-green-800 underline decoration-green-800/40 underline-offset-4 hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-800"
         >
           Get in touch

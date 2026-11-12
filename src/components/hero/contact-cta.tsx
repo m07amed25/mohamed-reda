@@ -1,14 +1,13 @@
 import { useId } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { contactHref } from "./contact";
 
 export const SpinningCTA = () => {
   const ringId = useId();
 
   return (
     <a
-      href={contactHref}
-      aria-label="Get in touch by email"
+      href="#contact"
+      aria-label="Get in touch"
       className="group relative mt-6 isolate grid size-28 shrink-0 place-items-center rounded-full border border-white/40 text-white outline-offset-4 hover:border-white/70 focus-visible:border-white/70 focus-visible:outline-2 focus-visible:outline-white motion-safe:transition-[scale,border-color] motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:scale-105 motion-safe:active:scale-95 md:mt-8 md:size-32"
     >
       <svg

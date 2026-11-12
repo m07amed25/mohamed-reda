@@ -8,6 +8,14 @@ For production, build with the public portfolio URL as the Vite base so social c
 npm run build -- --base=https://portfolio.example/
 ```
 
+## Contact form
+
+The form posts to `/api/contact`. The server sends the inquiry to the configured Gmail address, with the visitor’s address as Reply-To, and emails the visitor a copy of their submission. Both emails have HTML and plain-text versions.
+
+- **Local development:** Copy `.env.example` to `.env` and set `GMAIL_USER` and `GMAIL_APP_PASSWORD`. Use the Gmail address that owns the [Google App Password](https://support.google.com/accounts/answer/185833). Run `npm run dev`; Vite serves the form and API on the same port. `npm run preview` also serves the API locally.
+- **Vercel:** Add the same two variables to the project’s server environment and redeploy. Keep the password out of Git and never prefix it with `VITE_`. The included Vercel Node function serves `/api/contact`; a static-only upload of `dist` will not serve the API.
+- **Verification:** `npm test` checks form submissions and email rendering without contacting Gmail.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

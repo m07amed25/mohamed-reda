@@ -1,5 +1,6 @@
-import { Cpu, Workflow } from "lucide-react";
+import { CloudUpload, Cpu, Workflow } from "lucide-react";
 import {
+  SiBetterauth,
   SiFirebase,
   SiGooglemaps,
   SiNextdotjs,
@@ -11,6 +12,7 @@ import {
   SiReact,
   SiRedux,
   SiSpringboot,
+  SiTailwindcss,
   SiTrpc,
   SiTypescript,
 } from "react-icons/si";
@@ -34,6 +36,9 @@ const tech = {
   groq: { name: "Groq", logo: <Cpu /> },
   inngest: { name: "Inngest", logo: <Workflow /> },
   pusher: { name: "Pusher", logo: <SiPusher /> },
+  tailwindcss: { name: "Tailwind CSS", logo: <SiTailwindcss /> },
+  betterAuth: { name: "Better Auth", logo: <SiBetterauth /> },
+  uploadthing: { name: "UploadThing", logo: <CloudUpload /> },
 };
 
 const projects = [
@@ -98,6 +103,28 @@ const projects = [
       { href: "https://github.com/m07amed25/DevReview-AI", label: "View on GitHub" },
     ],
     image: "/p5.png",
+  },
+  {
+    id: "006",
+    shortTitle: "Rawad",
+    title: "Rawad (رواد): Accessible Online Exams & Live Proctoring",
+    wideDetails: true,
+    stack: [
+      tech.nextjs,
+      tech.typescript,
+      tech.postgresql,
+      tech.prisma,
+      tech.tailwindcss,
+      tech.betterAuth,
+      tech.uploadthing,
+    ],
+    description:
+      "An Arabic-language exam platform built to make online assessments more accessible to students with disabilities. Teachers can schedule timed exams with multiple-choice and essay questions, attach sign-language videos to individual questions, and monitor active attempts from a live dashboard. During an exam, teachers can send announcements and review flagged activity. Rawad grades multiple-choice answers automatically, lets teachers score essays manually, and gives students a dashboard to view their results.",
+    links: [
+      { href: "https://rawad-mu.vercel.app", label: "Try Rawad" },
+      { href: "https://github.com/m07amed25/rawad", label: "View on GitHub" },
+    ],
+    image: "/p6.png",
   },
 ];
 

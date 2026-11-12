@@ -1,0 +1,4 @@
+{
+  "framework": "vite",
+  "functions": { "api/contact.ts": { "maxDuration": 60 } }
+}
