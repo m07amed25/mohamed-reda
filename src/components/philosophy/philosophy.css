@@ -1,0 +1,320 @@
+.philosophy {
+  --philosophy-paper: #dcf9b9;
+  --philosophy-ink: #132216;
+  --philosophy-green: #285a37;
+  --philosophy-rule: #a7c489;
+  position: relative;
+  z-index: 20;
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+  padding: clamp(4.75rem, 11svh, 7.5rem) clamp(1rem, 4.5vw, 5rem)
+    clamp(1rem, 4svh, 3.5rem);
+  background: var(--philosophy-paper);
+  color: var(--philosophy-ink);
+  font-family: var(--font-sans);
+}
+
+.philosophy ::selection {
+  background: var(--philosophy-ink);
+  color: var(--philosophy-paper);
+}
+
+.philosophy:focus-visible {
+  outline: 2px solid var(--philosophy-green);
+  outline-offset: -2px;
+}
+
+.philosophy-inner {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+.philosophy-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30%);
+  gap: 0.85rem clamp(0.75rem, 3vw, 2rem);
+  align-items: center;
+}
+
+.philosophy-intro > div:first-child {
+  display: contents;
+}
+
+.philosophy-heading {
+  font-family: inherit;
+  font-size: clamp(1.5rem, 7.1vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+}
+
+.philosophy-heading span {
+  display: block;
+}
+
+.philosophy-heading span:last-child {
+  color: var(--philosophy-green);
+}
+
+.philosophy-lead {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  max-width: 50ch;
+  color: #304a2c;
+  font-size: clamp(0.9375rem, 1.4vw, 1.15rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.philosophy-art {
+  position: relative;
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 48%, #1e412a, #0b1d14 72%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 1rem),
+    calc(100% - 1rem) 100%,
+    0 100%
+  );
+}
+
+.philosophy-art::before,
+.philosophy-art::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.philosophy-art::before {
+  inset: 0;
+  background:
+    linear-gradient(to right, #c0faac18 1px, transparent 1px) center / 1.5rem
+      1.5rem,
+    linear-gradient(to bottom, #c0faac18 1px, transparent 1px) center / 1.5rem
+      1.5rem;
+  mask-image: radial-gradient(ellipse, #000 15%, transparent 80%);
+}
+
+.philosophy-art::after {
+  inset: 6%;
+  background:
+    linear-gradient(#9de29560, #9de29560) center / 1px 100% no-repeat,
+    linear-gradient(#9de29560, #9de29560) center / 100% 1px no-repeat;
+}
+
+.philosophy-orbit {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  height: 83%;
+  aspect-ratio: 1;
+  place-items: center;
+  rotate: -8deg;
+}
+
+.philosophy-orbit span {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 42%;
+  border: 1px solid #9cf49780;
+  border-radius: 50%;
+  transform: rotate(var(--orbit-angle));
+}
+
+.philosophy-orbit span:nth-child(3n + 1) {
+  border-color: #c6fa9fcb;
+}
+
+.philosophy-satellite {
+  position: absolute;
+  inset: 0;
+  rotate: 30deg;
+}
+
+.philosophy-satellite::after {
+  position: absolute;
+  width: 0.4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e8ffc5;
+  box-shadow: 0 0 0.65rem #c6fa9f;
+  content: "";
+  offset-path: ellipse(49.5% 21% at 50% 50%);
+  offset-distance: 78%;
+}
+
+.philosophy-core {
+  z-index: 2;
+  width: 0.6rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e8ffc5;
+  box-shadow: 0 0 1.25rem 0.25rem #a2ff93a0;
+}
+
+.philosophy-principles {
+  margin-top: clamp(1rem, 4svh, 3rem);
+  border-top: 1px solid var(--philosophy-rule);
+}
+
+.philosophy-principle {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) max-content;
+  gap: 0.15rem 0.6rem;
+  align-items: center;
+  padding-block: clamp(0.375rem, 1svh, 0.75rem);
+  border-bottom: 1px solid var(--philosophy-rule);
+}
+
+.philosophy-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--philosophy-green);
+}
+
+.philosophy-principle h3 {
+  font-family: inherit;
+  font-size: clamp(1rem, 2.15vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+.philosophy-principle p {
+  grid-column: 2 / -1;
+  max-width: 50ch;
+  color: #304a2c;
+  font-size: clamp(0.875rem, 1.25vw, 1rem);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.philosophy-link {
+  grid-column: 3;
+  grid-row: 1;
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-self: start;
+  gap: 0.4rem;
+  color: var(--philosophy-green);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: #517d45;
+  text-underline-offset: 0.23em;
+  white-space: nowrap;
+}
+
+.philosophy-link svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.philosophy-link:is(:hover, :focus-visible) {
+  color: var(--philosophy-ink);
+  text-decoration-color: currentColor;
+}
+
+.philosophy-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (min-width: 42rem) {
+  .philosophy-intro {
+    grid-template-columns: minmax(0, 1.23fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 4vw, 4rem);
+  }
+
+  .philosophy-intro > div:first-child {
+    display: block;
+  }
+
+  .philosophy-heading {
+    font-size: clamp(2rem, min(6.15vw, 9svh), 6rem);
+  }
+
+  .philosophy-lead {
+    margin-top: clamp(0.75rem, 2.4svh, 1.5rem);
+  }
+
+  .philosophy-art {
+    aspect-ratio: 1.38;
+    max-height: 43svh;
+  }
+
+  .philosophy-principle {
+    grid-template-columns: 1.25rem minmax(0, 0.9fr) minmax(0, 1.1fr) 7.5rem;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    align-items: center;
+  }
+
+  .philosophy-principle h3 {
+    text-wrap: pretty;
+  }
+
+  .philosophy-principle p {
+    grid-column: auto;
+  }
+
+  .philosophy-link {
+    grid-column: 4;
+    justify-self: end;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .philosophy-link svg {
+    transition: translate 200ms ease-out;
+  }
+
+  .philosophy-link:is(:hover, :focus-visible) svg {
+    translate: 0.15rem -0.15rem;
+  }
+
+  @supports (animation-timeline: view()) {
+    .philosophy-art {
+      view-timeline-name: --philosophy-art;
+    }
+
+    .philosophy-orbit,
+    .philosophy-satellite::after {
+      animation: philosophy-orbit-turn linear 1s both;
+      animation-timeline: --philosophy-art;
+      animation-range: entry 5% cover 48%;
+    }
+
+    .philosophy-satellite::after {
+      animation-name: philosophy-satellite-travel;
+    }
+  }
+}
+
+@keyframes philosophy-orbit-turn {
+  from {
+    rotate: -34deg;
+    scale: 0.9;
+  }
+  to {
+    rotate: 12deg;
+    scale: 1;
+  }
+}
+
+@keyframes philosophy-satellite-travel {
+  from {
+    offset-distance: 12%;
+  }
+  to {
+    offset-distance: 78%;
+  }
+}

@@ -3,6 +3,7 @@ import { BrandLogo } from "@/components/hero/brand-logo";
 import { CursorFollower } from "@/components/hero/cursor-follower";
 import { Hero } from "@/components/hero/hero";
 import Navbar from "@/components/Navbar";
+import Philosophy from "@/components/philosophy/Philosophy";
 import SelectedWork from "@/components/SelectedWork";
 import { Bookademo3 } from "@/components/ui/book-a-demo-3";
 import { Footer } from "@/components/ui/footer";
@@ -26,6 +27,7 @@ const Index = () => (
     <div className="relative z-20">
       <SelectedWork />
     </div>
+    <Philosophy />
     <div id="contact" />
     <Bookademo3 />
     <Footer />

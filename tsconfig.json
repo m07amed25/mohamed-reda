@@ -1,6 +1,7 @@
 {
   "files": [],
   "compilerOptions": {
+    "rewriteRelativeImportExtensions": true,
     "paths": { "@/*": ["./src/*"] }
   },
   "references": [

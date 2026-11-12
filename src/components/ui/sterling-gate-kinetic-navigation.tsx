@@ -188,6 +188,9 @@ export function Component({
           if (window.location.hash !== hash) {
             window.history.pushState(window.history.state, "", hash);
           }
+          if (target.hasAttribute("tabindex")) {
+            target.focus({ preventScroll: true });
+          }
           if (lenis) {
             lenis.scrollTo(target);
           } else {
